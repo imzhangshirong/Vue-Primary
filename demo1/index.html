@@ -4,7 +4,11 @@
         <title>Vue.js Demo 1，初识Vue</title>
         <meta charset="utf-8">
         <script src="../vue.js/vue2.2.6.js"></script>
-        
+        <style>
+            .os{
+                color:gray;
+            }
+        </style>
     </head>
     <body>
         <div id="app">
@@ -19,12 +23,14 @@
                 <p>带引号的'{{message}}',"{{message}}"</p>
                 <p>带tab的{{	message	}}</p>
                 <p>夹杂tab的{	{	message	}	}</p>
-                <p>看来只要不破坏{{}}双花括号结构的都能填充数据</p>
+                <p class="os">看来只要不破坏{{}}双花括号结构的都能填充数据</p>
             </section>
             <section>
                 <h1>可以把数据填充到任何位置吗？</h1>
                 <p title="{{message}}" >鼠标悬浮我看看？再看看Console</p>
-                <p>看来不是简单的文本替换啊，属性那些引号括起来的不会有反应呢～（内心os：应该后面有方法实现的？）</p>
+                <p class="os">看来不是简单的文本替换啊，属性那些引号括起来的不会有反应呢～（内心os：该怎么实现呢？）</p>
+                <p v-bind:title="message" >再鼠标悬浮我看看？</p>
+                <p class="os">对于属性的设置需使用v-bind:propName="propNameOfData"</p>
             </section>
             <section>
                 <h1>关于不同类型数据 直接填充 会是什么样呢？（内心os：和console的效果一样么？）</h1>
@@ -35,7 +41,7 @@
                 <p>array:{{typeArray}}</p>
                 <p>date:{{typeDate}}</p>
                 <p>object:{{typeObject}}</p>
-                <p>看来和console是一样的</p>
+                <p class="os">看来和console是一样的</p>
             </section>
         </div>
         <hr>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue.js Demo 2，初识Vue，computed,methods,watch！</title>
+        <meta charset="utf-8">
+        <script src="../vue.js/vue2.2.6.js"></script>
+        <style>
+            .os{
+                color:gray;
+            }
+            .red{
+                color:red;
+            }
+            .green{
+                color:green;
+            }
+            .bold{
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <section>
+                <h1>demo1我们学会了怎么把数据填充到我们想要的地方，对于HTML我们可以用string来进行填充么？</h1>
+                <p>{{html1}}</p>
+                <p class="os">显然不是直接的innerHTML插入，插入的是纯文本，接下来我们看看如何填充HTML</p>
+                <p v-html="html1"></p>
+                <p class="os">填充HTML需要使用属性：v-html="propNameOfData"（ps：直接填充html可能造成xss）</p>
+            </section>
+            <section>
+                <h1>在{{}}里使用JavaScript表达式（注意是表达式，不是语句）</h1>
+                <p>输出message+"!!??"：{{message+"!!??"}}</p>
+                <p class="os">不能使用var a=1此类的，这是语句不是表达式。我们也可以调用函数，可以使用三元运算符</p>
+            </section>
+            <section>
+                <h1>在{{}}里使用方法函数</h1>
+                <p v-bind:title="appFunc1(2)">输出appFunc1处理后的值(2+1)=?：{{appFunc1(2)}}</p>
+                <p class="os">也可以用app里定义的methods</p>
+                <p v-bind:title="appFunc2('222')">输出message+"222"=?：{{appFunc2("222")}}</p>
+                <p class="os">v-bind模式下也支持。注意，我们不能通过此方法访问所有的全局变量（也要避免），不过Date，Math还是支持的</p>
+                <p class="os">接下来我们可能会想：如果我的操作很复杂，岂不是要在模板里写很多表达式，有些也不能简单的用表达式操作</p>
+            </section>
+            <section>
+                <h1>在{{}}里使用计算属性</h1>
+                <p v-bind:title="appFunc3">输出message和反的message：{{appFunc3}}</p>
+                <p class="os">使用app里定义的computed计算属性</p>
+                <p class="os">计算属性、methods和表达式的差异：计算属性依赖于使用的属性值，若使用的属性改变才会计算，没改变一直返回之前的值，有缓存功能；其他2种每次使用都会计算一遍</p>
+                <p class="os">计算属性有缓存的特性，我们在某些操作时要注意：比如返回Date.now()时,并不会动态刷新重新计算</p>
+            </section>
+            <section>
+                <h1>计算属性setter和getter</h1>
+                <p v-bind:title="appFunc4">输出空格分割的message：{{appFunc4}}</p>
+                <button onclick="app.appFunc4='message1'">appFunc4置反message</button>
+                <p class="os">通过设置setter和getter可以更灵活的使用计算属性</p>
+            </section>
+            <section>
+                <h1>关于响应数据的变化</h1>
+                <p class="os">computed计算属性依赖于使用的属性（即响应使用的数据变化），我们也可以用watch来捕获某些数据的变化</p>
+                <p>messageWatcher:{{messageWatcher}}</p>
+                <button onclick="app.message='message2'">change</button>
+                <p class="os">ps：计算属性可以做到同样的效果，计算属性更方便</p>
+                <p class="os">什么时候改用计算属性，什么时候用watch呢？如果在响应数据变化时需要一步操作或者进行大开销的操作时应当用watch</p>
+            </section>
+            <section>
+                <h1>填充元素属性：class,style</h1>
+                <p class="os">demo1我们知道元素属性需要使用：v-bind:propName="propNameOfData"</p>
+                <p class="os">这里我们可以使用更强大的方式</p>
+                <p v-bind:class="messageClass">包含red变红，包含bold变粗:{{message}}</p>
+                <button onclick="app.message='red'">red</button>
+                <button onclick="app.message='red bold'">red bold</button>
+                <p v-bind:class="[{green:isGreen},{bold:isBold},'red']">数组形式：{{message}}</p>
+                <button onclick="app.isGreen=true">green</button>
+                <button onclick="app.isBold=true">bold</button>
+                <p v-bind:style="{fontSize:fontSize+'px','line-height':lineHeight+'px'}">{{message}}</p>
+                <button onclick="app.fontSize=12">12px</button>
+                <button onclick="app.lineHeight=30">line-height:30px</button>
+                <p class="os">支持驼峰和-两种命名方式，数组模式和class类似，vue对于某些css属性会自动补全前缀</p>
+            </section>
+        </div>
+    </body>
+    <script src="vue.demo.js"></script>
+</html>
