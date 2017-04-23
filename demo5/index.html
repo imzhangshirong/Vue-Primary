@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue.js Demo 5，Vue事件绑定处理</title>
+        <meta charset="utf-8">
+        <script src="../vue.js/vue2.2.6.js"></script>
+        <style>
+            .os{
+                color:gray;
+            }
+            .bold{
+                color: red;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <section>
+                <h1>在Vue中绑定一个数据填充属性已经很熟悉了，那么事件呢？我们来看几种方法</h1>
+                <button v-on:click="add">使用data里的function add：{{counter}}</button>
+                <button v-on:click="counter++">使用JavaScript表达式：{{counter}}</button>
+                <button v-on:click="add2">使用app里methods里的add2：{{counter}}</button>
+                <button v-on:click="add3(2,$event)">使用app里methods里的add3：{{counter}}</button>
+                <p class="os">这里我们看出：我们不能直接用data里的函数，只能使用在Vue对象的methods里声明的</p>
+                <p class="os">传递event对象可以使用$event（this呢？答案是没有$this，我们可以通过event.target获取）</p>
+                <p class="os">我们试试用v-bind:onclick试试？</p>
+                <button v-bind:onclick="add">使用data里的function add：{{counter}}</button>
+                <button v-bind:onclick="add2">使用app里methods里的add2：{{counter}}</button>
+                <!--button v-bind:onclick="add()">使用add()</button>     
+                <button v-bind:onclick="add2()">使用add2()</button-->                
+                <p class="os">看来不能使用v-bind:onclick，不过使用add()或add2()好像发现了一些神奇的事（初始化的过程Vue调用了他们多次？）</p>
+            </section>
+            <section>
+                <h1>强大的绑定事件修饰符</h1>
+                <a href="https://www.sky31.com" v-on:click.prevent="aalert">点击我不会跳转哦</a>
+                <h4>事件修饰符</h4>
+                <ul>
+                    <li>.prevent => 使用preventDefault()</li>
+                    <li>.stop => 使用stopPropagation()</li>
+                    <li>.capture => 捕获模式</li>
+                    <li>.self => 当自身触发（子元素不会触发）</li>
+                    <li>.once => 触发一次（2.1.4新增）</li>
+                </ul>
+                <p class="os">以上的后缀都可以串联使用，很强大是不是，我们来看看更棒的</p>
+                <a href="https://www.sky31.com" v-on:click.ctrl.prevent="aalert">按住ctrl点击我才不会跳转哦</a>
+                <h4>按键修饰符</h4>
+                <ul>
+                    <li>.enter</li>
+                    <li>.tab</li>
+                    <li>.delete => 捕获 “删除” 和 “退格” 键</li>
+                    <li>.esc</li>
+                    <li>.space</li>
+                    <li>.up</li>
+                    <li>.down</li>
+                    <li>.left</li>
+                    <li>.right</li>
+                    <li>.数字 => 对应的键值例如c, .67</li>
+                    <li>.ctrl （2.1.0新增）</li>
+                    <li>.alt （2.1.0新增）</li>
+                    <li>.shift （2.1.0新增）</li>
+                    <li>.meta => win键 （2.1.0新增）</li>
+                </ul>
+            </section>
+        </div>
+    </body>
+    <script src="vue.demo.js?"></script>
+</html>
