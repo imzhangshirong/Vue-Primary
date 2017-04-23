@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue.js Demo 4，Vue渲染，列表For渲染</title>
+        <meta charset="utf-8">
+        <script src="../vue.js/vue2.2.6.js"></script>
+        <style>
+            .os{
+                color:gray;
+            }
+            .bold{
+                color: red;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <section>
+                <h1>如果我要输出一组数据，不可能写n个吧= =，来看看v-for吧！</h1>
+                <ul>
+                    <li v-for="item in messageArray">{{item}}</li>
+                </ul>
+                <p class="os">如何知道序号呢？</p>
+                <ul>
+                    <li v-for="(item,index) in messageArray">{{index}}-{{item}}</li>
+                </ul>
+                <p class="os">如何输出对象内的成员呢？</p>
+                <ul>
+                    <li v-for="(item,key) in messageObj">{{key}}:{{item}}</li>
+                </ul>
+                <p class="os">可以输出1-10么？</p>
+                <ul>
+                    <li v-for="n in 10">{{n}}</li>
+                </ul>
+                <p class="os">输出messageArray里包含Vue的</p>
+                <ul>
+                    <li v-for="item in messageArray" v-if="item.indexOf('Vue')>-1">{{item}}</li>
+                </ul>
+                <p class="os">这里看出，v-for的优先级比v-if的高，对于筛选方面我们也可以使用计算属性呀～是不是</p>
+            </section>
+            <section>
+                <h1>关于列表渲染的复用性</h1>
+                <ul id="test">
+                    <li v-for="item in messageArray">{{item}}</li>
+                </ul>
+                <button onclick="document.getElementById('test').firstChild.style.color='red'">外部改变第一项颜色</button>
+                <button onclick="app.messageArray.shift()">删除第一项</button>
+                <p class="os">看出来，v-for对于数组的改变不会重新渲染元素，而是复用原来的那个元素，如果我们希望重新渲染呢？</p>
+                <ul id="test2">
+                    <li v-for="item in messageArray" v-bind:key="item">{{item}}</li>
+                </ul>
+                <button onclick="document.getElementById('test2').firstChild.style.color='red'">外部改变第一项颜色</button>
+                <button onclick="app.messageArray.unshift('hello')">加入一项</button>
+                <p class="os">重新渲染我们需要提供一个key，并与这一项的某个值绑定（v-bind），这样Vue才会识别</p>
+            </section>
+            <section>
+                <h1>关于对列表数据的修改和渲染的触发</h1>
+                <ul id="test">
+                    <li v-for="item in messageArray">{{item}}</li>
+                </ul>
+                <button onclick="app.messageArray[0]+='11'">直接修改数组元素来修改第一项</button><button onclick="app.messageArray.length-=1">直接修改数组length</button><button onclick="Vue.set(app.messageArray,0,'111')">Vue.set修改第一项</button>
+                <p class="os">直接  修改数组元素 和 length  无法触发  Vue的渲染（JavaScript的限制，无法探测）</p>
+                <h4>我们对数组可以使用以下方法触发渲染</h4>
+                <ul>
+                    <li>pop()</li>
+                    <li>push()</li>
+                    <li>shift()</li>
+                    <li>unshift()</li>
+                    <li>sort()</li>
+                    <li>reverse()</li>
+                    <li>splice()</li>
+                </ul>
+                <p class="os">如果以上无法达到我的要求呢？这个时候我们可以直接赋值数组（新的），得到新数组可以用concat,slice,map,filter。我们也可以用 Vue.set 来修改某一项</p>
+            </section>
+            <section>
+                <h1>列表的渲染和复用规则是否对对象也成立呢？</h1>
+                <ul id="test3">
+                    <li v-for="(item,key) in messageObj">{{key}}:{{item}}</li>
+                </ul>
+                <button onclick="document.getElementById('test3').firstChild.style.color='red'">外部改变第一项颜色</button><button onclick="app.messageObj.a='11'">直接修改对象a成员</button><button onclick="Vue.set(app.messageObj,'a','111')">Vue.set修改a</button>
+                <p class="os">发现：复用的规则还是一样，对值的变化和触发渲染方面还是有很大区别的，对象可以放心直接修改，使用Vue.set也可以修改</p>
+            </section>
+        </div>
+    </body>
+    <script src="vue.demo.js?"></script>
+</html>
