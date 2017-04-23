@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue.js Demo 3，Vue渲染，条件渲染</title>
+        <meta charset="utf-8">
+        <script src="../vue.js/vue2.2.6.js"></script>
+        <style>
+            .os{
+                color:gray;
+            }
+            .bold{
+                color: red;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <section>
+                <h1>简单渲染填充一下数据</h1>
+                <p>{{message}}</p>
+                <p class="os">当message长度大于5下面会出现</p>
+                <p>出现吧：{{(message.length>5)?message:''}}</p>
+                <p class="os">当message长度大于20下面会出现，使用v-if</p>
+                <p v-if="message.length > 20">出现吧：{{message}}</p>
+                <template v-if="message.length > 20">
+                    <h2>这里也是一种使用方式</h2>
+                    <p>也出现吧：{{message}}</p>
+                </template>
+                <p v-else>长度小于20，<button onclick="app.message+='!'">加长</button></p>
+                <p class="os">对于条件输出，我们可以使用JavaScript表达式，也可以使用v-if属性。直接使用表达式关系的是数据输出，v-if更关心的是HTML结构（模板）的输出。（v-if,v-else,v-else-if）</p>
+                <p class="os">对于模板的输出也可以使用template标签</p>
+                <p class="os">我们看一下使v-if判断为真的有哪些值</p>
+                <p v-if="yes">yes：{{message}}</p>
+                <p v-if="-1">-1：{{message}}</p>
+                <p v-if="0">0：{{message}}</p>
+                <p v-if="1">1：{{message}}</p>
+                <p v-if="-1.1">-1.1：{{message}}</p>
+                <p v-if="0.0">0.0：{{message}}</p>                
+                <p v-if="0.5">0.5：{{message}}</p>
+                <p v-if="abc">abc：{{message}}</p>
+                <p v-if="true">true：{{message}}</p>
+                <p v-if="[1,2]">[1,2]：{{message}}</p>
+                <p v-if="[]">[]：{{message}}</p>
+                <p v-if="{a:1}">{a:1}：{{message}}</p>
+                <p v-if="{}">{}：{{message}}</p>
+                <p v-if="ok">ok：{{message}}</p>
+                <p v-if="">：{{message}}</p>
+                <p v-if="NaN">NaN：{{message}}</p>
+                <p v-if="undefined">undefined：{{message}}</p>
+                <p class="os">我们可以看出，对于：true、不为0的整数和小数、数组、对象 v-if为真，特殊的yes和空也为真，其他的会自动去判断app里对应的变量是否满足真条件</p>
+            </section>
+            <section>
+                <h1>看一个栗子</h1>
+                <template v-if="useUsername">
+                    <label>Username</label>
+                    <input class="bold" placeholder="Enter your username">
+                </template>
+                <template v-else>
+                    <label>Email</label>
+                    <input placeholder="Enter your email address">
+                </template>
+                <button onclick="app.useUsername=!app.useUsername">切换方式</button>
+                <p class="os">输入值后切换方式，我们发现input内的值没有变化，只是input的元素属性变了，这并不适用所有情况</p>
+                <template v-if="useUsername">
+                    <label>Username</label>
+                    <input class="bold" placeholder="Enter your username" key="username">
+                </template>
+                <template v-else>
+                    <label>Email</label>
+                    <input placeholder="Enter your email address" key="email">
+                </template>
+                <button onclick="app.useUsername=!app.useUsername">切换方式</button>
+                <p class="os">当我们设置 <b>不同key</b> 属性时，使用不同模板输出时就会对input进行替换了</p>
+            </section>
+            <section>
+                <h1>我们来看看textarea会不会是一样的呢？</h1>
+                <template v-if="some">
+                    <label>textarea</label>
+                    <textarea class="bold" placeholder="Enter some..."></textarea>
+                </template>
+                <template v-else>
+                    <label>textarea</label>
+                    <textarea placeholder="Enter some..."></textarea>
+                </template>
+                <button onclick="app.some=!app.some">切换</button>
+                <template v-if="some">
+                    <label>textarea</label>
+                    <textarea class="bold" placeholder="Enter some..." key="1"></textarea>
+                </template>
+                <template v-else>
+                    <label>textarea</label>
+                    <textarea placeholder="Enter some..." key="email"></textarea>
+                </template>
+                <button onclick="app.some=!app.some">切换</button>
+                <p class="os">和input一样，这里我们再试试和不同的v-if块使用同样的key会不会有影响（不同v-if块内的是相互独立的）</p>
+            </section>
+            <section>
+                <h1>如果想隐藏，我只能用改变class么？</h1>
+                <p v-show="show">show：{{message}}</p>
+                <button onclick="app.show=!app.show">切换</button>
+                <p class="os">对于隐藏而不是销毁的我们可以使用v-show，只会加上display:none（注意v-show始终都会渲染，为false时只是隐藏起来了，v-if是真正的条件渲染）</p>
+            </section>
+        </div>
+    </body>
+    <script src="vue.demo.js?"></script>
+</html>
