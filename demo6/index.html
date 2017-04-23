@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue.js Demo 6，Vue表单控件数据双向绑定</title>
+        <meta charset="utf-8">
+        <script src="../vue.js/vue2.2.6.js"></script>
+        <style>
+            .os{
+                color:gray;
+            }
+            .bold{
+                color: red;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <section>
+                <h1>这次我们来尝试双向绑定，使用v-model</h1>
+                <input v-model="inputData"/>
+                <p>{{inputData}}</p>
+                <p class="os">我们可以看到双向绑定的好处是，用户输入的数据能及时赋值给对应的成员变量</p>
+                <textarea v-model="textareaData" placeholder="看看多行">这里的文字不会有效果</textarea>
+                <p >{{textareaData}}</p>
+                <p style="white-space: pre">style处理：{{textareaData}}</p>
+                <p class="os">多行并不会自动进行\n与&lt;br&gt;的装换</p>
+                <p>
+                    <input value="One" type="checkbox" id="checkbox1" v-model="checked"/>
+                    <label for="checkbox1">One</label>
+                    <input value="Two" type="checkbox" id="checkbox2" v-model="checked"/>
+                    <label for="checkbox2">Two</label>
+                    <input value="Three" type="checkbox" id="checkbox3" v-model="checked"/>
+                    <label for="checkbox3">Three</label><br>
+                    <span>checked:{{checked}}</span>
+                </p>
+                <p>
+                    <input type="radio" id="radio1" value="radio1" v-model="radio"/>
+                    <label for="radio1">radio1</label>
+                    <input type="radio" id="radio2" value="radio2" v-model="radio"/>
+                    <label for="radio2">radio2</label>
+                    <br>
+                    <span>radio:{{radio}}</span></p>
+                <p>
+                    <select v-model="select1">
+                        <option >A</option>
+                        <option >B</option>
+                        <option >C</option>
+                    </select><br>
+                    <span>不带value select:{{select1}}</span><br>
+                    <select v-model="select2">
+                        <option value="a">A</option>
+                        <option value="b">B</option>
+                        <option value="c">C</option>
+                    </select><br>
+                    <span>带value select:{{select2}}</span><br>
+                    <select v-model="select3" multiple>
+                        <option value="a">A</option>
+                        <option value="b">B</option>
+                        <option value="c">C</option>
+                    </select><br>
+                    <span>多选 select:{{select3}}</span>
+                </p>
+            </section>
+            <section>
+                <h1>绑定value到属性</h1>
+                <p>
+                    <input v-bind:true-value="a" v-bind:false-value="b" type="checkbox" id="checkbox4" v-model="checked2"/>
+                    <label for="checkbox4">{{a}}?</label><br>
+                    <span>选中为true显示为a的值，否则为b的值:{{checked2}}</span>
+                </p>
+                <p>
+                    <input v-bind:value="a" type="radio" id="radio3" v-model="radio3"/>
+                    <label for="radio3">{{a}}?</label>
+                    <input v-bind:value="b" type="radio" id="radio4" v-model="radio3"/>
+                    <label for="radio4">{{b}}?</label><br>
+                    <span>{{radio3}}</span>
+                </p>
+                <p>
+                    <select v-model="select4">
+                        <option v-bind:value="{ number1: 123 }">123</option>
+                        <option v-bind:value="{ number2: 234 }">234</option>
+                    </select><br>
+                    <span>{{select4}}</span>
+                </p>
+            </section>
+            <section>
+                <h1>修饰符</h1>
+                <input v-model.lazy="inputData"/>
+                <p>.lazy (监听change而不是input，即不会即时赋值) => {{inputData}}</p>
+                <input v-model.trim="inputData"/>
+                <p style="white-space:pre">.trim (自动清除收尾空格) => {{inputData}}</p>
+                <input v-model.number="inputData" type="number"/>
+                <p style="white-space:pre">.number (自动装换为Number，如果原值的转换结果为 NaN 则返回原值) => {{inputData}}</p>
+                <p class="os">对于想自己处理的数据，我们可以使用计算属性的setter，我们来看个反向的</p>
+                <input v-model="inputDataR" />
+                <p style="white-space:pre">奇怪的反向：{{inputDataR}}</p>
+            </section>
+        </div>
+    </body>
+    <script src="vue.demo.js?"></script>
+</html>
