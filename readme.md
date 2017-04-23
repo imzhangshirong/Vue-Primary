@@ -1,4 +1,4 @@
-#Vue.js 基础学习实践
+# Vue.js 基础学习实践
 ## 使用vue.js 2.2.6
 
 ### 1. [Demo 1，初识Vue](http://imzhangshirong.github.io/Vue-Primary/demo1/)
