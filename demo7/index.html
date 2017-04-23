@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue.js Demo 7，组件Component</title>
+        <meta charset="utf-8">
+        <script src="../vue.js/vue2.2.6.js"></script>
+        <style>
+            .os{
+                color:gray;
+            }
+            table{
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <template id="someId">
+            <h1>appComponent</h1>
+        </template>
+        <!--注意要用template作为root，否则会显示在页面上-->
+        <div id="app">
+            <section>
+                <h1>我们通过全局和局部建立2种组件</h1>
+                <app-component></app-component>
+                <app-component2></app-component2>
+                <p class="os">我们在声明组件的时候要注意data，详情移步js文件</p>
+                <p class="os">接下我们来看看一种特殊的情况</p>
+                <table border="2">
+                    <app-component3></app-component3>
+                    <tr is="app-component3"></tr>
+                    <tr is="appComponent3"></tr>
+                    <tr is="AppComponent3"></tr>
+                    <!--3种命名格式都可以-->
+                </table>
+                <p class="os">可以看见，第一个app-component3并没有在table里</p>
+                <p>&lt;ul&gt;、&lt;ol&gt;、&lt;select&gt;、&lt;table&gt;这些标签限制子元素的类型，这时候我们需要用is属性指定</p>
+            </section>
+            <section>
+                <h1>组件data</h1>
+                <app-component4></app-component4>
+                <app-component4></app-component4> <span>共用一个data</span><br>
+                <app-component5></app-component5>
+                <app-component5></app-component5> <span>独立data</span>
+                <p class="os">我们在声明组件的时候要注意data，应该给组件的data返回独立的对象，详情移步js文件</p>
+            </section>
+            <section>
+                <h1>属性和父子组件之间的数据，props</h1>
+                <app-component6 message="我没有父组件，但是设置了message属性值"></app-component6>
+                <app-component7 message-p="我的message属性值来自父组件"></app-component7>
+                <p class="os">props是单向数据的传输和v-model不同。Tips：v-bind:prop可以简写为:prop，v-on:click可以简写为@:click</p>
+            </section>
+            <section>
+                <h1>props的验证</h1>
+                <app-component8 number-data=123 ></app-component8>
+                <app-component8 number-data="abc" string-data="abcderf"></app-component8>
+                <p >这里props如果是对象，有3个属性：type（类型），default（不传的时候的默认值），validator（自定义的校验）</p>
+                <p>type类型有：</p>
+                <ul>
+                    <li>null（全部通过）</li>
+                    <li>String</li>
+                    <li>Number</li>
+                    <li>Function</li>
+                    <li>Object</li>
+                    <li>Array</li>
+                    <li>Boolean</li>
+                </ul>
+            </section>
+            <section>
+                <h1>自定义事件：$on，$emit</h1>
+                <p>$on监听事件，$emit触发事件（注意：$on并不是addEventListener，$emit也不是dispatchEvent，他们支持自定义的名字，很强大是不是）</p>
+                <p><span>{{counter}}</span><br><app-component9 v-on:add_counter="addCounterApp"></app-component9 ><app-component9  v-on:add_counter="addCounterApp"></app-component9></p>
+                <p class="os">2个组件分别+1，同时发送add_counter事件，v-on监听事件触发methods.addCounterApp</p>
+                <p class="os">v-model="some"其实是v-bind:value="some" v-on:input="some = $event.target.value"的语法糖</p>
+                <p class="os">非父子组件间的通信也可以用类似的方法，由Vue实例做总线，通过组件props传输给组件</p>
+            </section>
+            <section>
+                <h1>slot与内容的分发</h1>
+                <p class="os">slot其实理解起来不难，简单来说就是用自定义的HTML结构去替换模板slot的部分</p>
+                <app-alert></app-alert>
+                <app-alert><i>bad news</i>：Oppppp!</app-alert> 
+                <p class="os">对于多个不同的slot，我们可以使用name属性来指明，在html里我们用slot属性来对应name</p>
+                <app-alert-mul></app-alert-mul>
+                <app-alert-mul><template slot="title">bad news</template><template slot="msg">Oppppp!</template></app-alert-mul> 
+            </section>
+            <section>
+                <h1>组件的挂载和动态切换</h1>
+                <component :is="alertType"><i>bad news</i>：Oppppp!</component>
+                <button @click="changeAlertType">改变组件</button>
+                <p class="os">is属性指定了该挂载哪种组件，我们可以利用来动态切换</p>
+                <p class="os">使用keep-alive标签包裹的部分会常驻内存，可以保留它的状态或避免重新渲染</p>
+            </section>
+            <section>
+                <h1>异步组件</h1>
+                <pre >
+Vue.component('async-example', function (resolve, reject) {
+  setTimeout(function () {
+    // Pass the component definition to the resolve callback
+    resolve({
+      template: '&lt;div&gt;I am async!&lt;/div&gt;'
+    })
+  }, 1000);
+});
+                </pre>
+                <p class="os">resolve和reject是2个回调，当成功时调用resolve并返回组件，当失败时调用reject并返回组件，和Promise类似，不知道有没有catch和all？</p>
+            </section>
+            <section>
+                <h1>递归组件</h1>
+                <p>前面我们在进行列表渲染时，如果我们想打印出对象的所有结构呢？即递归</p>
+                <pre >
+Vue.component('doTree', {
+    name: 'doTree',//这里我们在定义组件的时候会自动设置
+    template: '&lt;div&gt;&lt;doTree&gt;&lt;/doTree&gt;&lt;/div&gt;'
+});
+                </pre>
+                <p class="os">递归应当有条件跳出递归（使用v-if），否则 max stack size exceeded （上面这个就会出现这种情况）</p>
+                <p>组件间的循环引用</p>
+                <p class="os">假设有一个树形结构用了2个组件A，B，A依赖B，B依赖A，Vue会进行自动处理这种矛盾。如果用Webpack或Browserify来require或import就会存在问题，我们需要在beforeCreate 生命周期钩子中去注册它</p>
+                <pre >
+beforeCreate: function () {
+  this.$options.components.B = require('./B.vue');
+}
+                </pre>
+            </section>
+            <section>
+                <h1>其他</h1>
+                <p>子组件索引</p>
+                <p class="os">对子组件设置ref属性例如ref="someRef"，可以在Vue实例中使用$refs.someRef（注意：$refs只在组件渲染完成后才填充，并且它是非响应式的。它仅仅作为一个直接访问子组件的应急方案——应当避免在模版或计算属性中使用 $refs）</p>
+                <p>v-once 大量静态数据的缓存</p>
+                <pre >
+Vue.component('terms-of-service', {
+  template: '\
+    &lt;div v-once&gt;\
+      &lt;h1&gt;Terms of Service&lt;/h1&gt;\
+      ... a lot of static content ...\
+    &lt;/div&gt;\
+  '
+});
+                </pre>
+            </section>
+        </div>
+        <!--组件只能在Vue绑定的元素内生效-->
+        <app-component></app-component>
+        <app-component2></app-component2>
+    </body>
+    <script src="vue.demo.js?=3"></script>
+</html>
